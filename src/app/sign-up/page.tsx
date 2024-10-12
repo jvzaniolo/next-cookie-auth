@@ -1,24 +1,16 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useActionState } from 'react'
+import { signUp } from './action'
 
 export default function SingUp() {
-	async function signUp(formData: FormData) {
-		'use server'
-		// TODO: Valide os dados do formulário do usuário com um esquema do zod
-
-		// TODO: Chame a função `createUser` com os dados do formulário
-
-		// TODO: Chame a função `createSession` com o id do usuário
-
-		// TODO: Redirecione o usuário para a página `/`
-
-		console.log('Sign up Server Action')
-	}
+	const [formState, formAction, isPending] = useActionState(signUp, undefined)
 
 	return (
 		<div className="mx-auto grid w-full max-w-md grow place-items-center px-4 py-8">
-			<form action={signUp} className="w-full space-y-4">
+			<form action={formAction} className="w-full space-y-4">
 				<h1 className="mb-2 text-2xl">Crie sua conta para continuar!</h1>
 				<p className="mb-8 text-sm text-zinc-400">
 					Torne o seu dia a dia mais fácil e produtivo.
@@ -31,9 +23,11 @@ export default function SingUp() {
 						name="email"
 						id="email"
 						placeholder="exemplo@email.com"
-						className="w-full"
+						className="mb-2 w-full"
 					/>
-					{/* TODO: Display error message */}
+					{formState?.errors?.email && (
+						<p className="text-red-400 text-sm">{formState.errors.email}</p>
+					)}
 				</div>
 
 				<div>
@@ -43,15 +37,20 @@ export default function SingUp() {
 						name="password"
 						id="password"
 						placeholder="*******"
-						className="w-full"
+						className="mb-2 w-full"
 					/>
-					{/* TODO: Display error message */}
+					{formState?.errors?.password && (
+						<p className="text-red-400 text-sm">{formState.errors.password}</p>
+					)}
 				</div>
 
-				{/* TODO: Display error message */}
+				{formState?.message && (
+					<p className="text-red-400 text-sm">{formState.message}</p>
+				)}
 
-				{/* TODO: Disable the button if is submitting form */}
-				<Button className="mt-8 w-full">Criar conta</Button>
+				<Button className="mt-8 w-full" disabled={isPending}>
+					Criar conta
+				</Button>
 			</form>
 		</div>
 	)
