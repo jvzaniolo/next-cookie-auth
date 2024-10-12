@@ -3,9 +3,11 @@ import './globals.css'
 import { CreateGoalDialog } from '@/components/create-goal-dialog'
 import { Dialog } from '@/components/ui/dialog'
 import { OutlineButton } from '@/components/ui/outline-button'
+import { destroySession } from '@/lib/session'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { registerGoal } from './actions'
 
 const inter = Inter({
@@ -34,8 +36,8 @@ export default function RootLayout({
 						<form
 							action={async () => {
 								'use server'
-								// TODO: Chame a função `destroySession` para deslogar o usuário
-								// TODO: Redirecione o usuário para a página `/login`
+								destroySession()
+								redirect('/login')
 							}}
 							className="flex justify-end"
 						>
